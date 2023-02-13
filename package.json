@@ -4,13 +4,17 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "env-cmd --file config/dev.env nodemon src/index.js",
+    "test": "env-cmd --file config/test.env yarn node --experimental-vm-modules $(yarn bin jest) --runInBand",
+    "testw": " yarn test --watch"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "license": "MIT",
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
     "bcryptjs": "^2.4.3",
-    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^4.7.0",
@@ -21,7 +25,10 @@
   },
   "devDependencies": {
     "@types/validator": "^13.7.10",
-    "nodemon": "^2.0.20"
+    "env-cmd": "^10.1.0",
+    "jest": "^29.4.2",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3"
   },
   "type": "module"
 }

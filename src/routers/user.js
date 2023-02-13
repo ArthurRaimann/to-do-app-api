@@ -28,7 +28,11 @@ router.post('/users', async (req, res) => {
 
   try {
     await user.save();
-    sendWelcomeEmail(user.email, user.name);
+    try {
+      sendWelcomeEmail(user.email, user.name);
+    } catch (e) {
+      console.log(e);
+    }
     const token = await user.generateAuthToken();
 
     res.status(201).send({ user, token });
@@ -159,7 +163,12 @@ router.delete('/users/me', auth, async (req, res) => {
     // }
 
     await req.user.remove();
-    sendCancelationEmail(req.user.email, req.user.name);
+    try {
+      sendCancelationEmail(req.user.email, req.user.name);
+    } catch (e) {
+      console.log(e);
+    }
+
     res.send(req.user);
   } catch (error) {
     res.status(500).send(error);
@@ -170,7 +179,7 @@ router.delete('/users/me', auth, async (req, res) => {
 router.post(
   '/users/me/avatar',
   auth,
-  upload.single('upload'),
+  upload.single('avatar'),
   async (req, res) => {
     const buffer = await sharp(req.file.buffer)
       .resize({ width: 250, height: 250 })
